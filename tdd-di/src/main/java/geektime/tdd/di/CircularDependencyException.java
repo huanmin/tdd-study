@@ -15,7 +15,7 @@ public class CircularDependencyException extends RuntimeException {
         components.addAll(e.components);
     }
 
-    public Class<?>[] getComponents() {
-        return components.toArray(Class<?>[]::new);
+    public Set<Class<?>> getComponent() {
+        return components;
     }
 }
