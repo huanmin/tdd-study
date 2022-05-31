@@ -127,7 +127,7 @@ public class ContainerTest {
                 config.bind(Dependency.class, ComponentWithCircularDependency.class);
                 config.bind(Component.class, ComponentWithInjectionConstructor.class);
 
-                CircularDependencyException exception = assertThrows(CircularDependencyException.class, () -> config.getContext().get(Component.class));
+                CyclicDependenciesFoundException exception = assertThrows(CyclicDependenciesFoundException.class, () -> config.getContext());
                 assertEquals(2, exception.getComponent().toArray(Class<?>[]::new).length);
                 assertTrue(exception.getComponent().containsAll(asList(Component.class, Dependency.class)));
             }
@@ -138,7 +138,7 @@ public class ContainerTest {
                 config.bind(Component.class, ComponentWithInjectionConstructor.class);
                 config.bind(Dependency.class, DependencyDependedOnDependency.class);
 
-                CircularDependencyException exception = assertThrows(CircularDependencyException.class, () -> config.getContext().get(Component.class));
+                CyclicDependenciesFoundException exception = assertThrows(CyclicDependenciesFoundException.class, () -> config.getContext());
 
                 assertEquals(3, exception.getComponent().toArray(Class<?>[]::new).length);
                 assertTrue(exception.getComponent().containsAll(asList(Component.class, Dependency.class, AnotherDependency.class)));
