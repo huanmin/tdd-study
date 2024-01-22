@@ -9,8 +9,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Args {
+public class Args<T> {
+
+    private Map<Class<?>, OptionParser> parsers;
+    private Class<T> optionsClass;
+
+    public Args(Map<Class<?>, OptionParser> parsers, Class<T> optionsClass) {
+        this.parsers = parsers;
+        this.optionsClass = optionsClass;
+    }
+
     public static <T> T parse(Class<T> optionsClass, String... args) {
+        return new Args<>(PARSERS, optionsClass).parse(args);
+    }
+
+    private T parse(String[] args) {
         try {
             List<String> arguments = Arrays.asList(args);
 
@@ -24,10 +37,10 @@ public class Args {
         }
     }
 
-    private static Object parseOption(Parameter parameter, List<String> arguments) {
+    private Object parseOption(Parameter parameter, List<String> arguments) {
         if (!parameter.isAnnotationPresent(Option.class))
             throw new IllegalOptionException(parameter.getName());
-        return PARSERS.get(parameter.getType()).parse(arguments, parameter.getAnnotation(Option.class));
+        return parsers.get(parameter.getType()).parse(arguments, parameter.getAnnotation(Option.class));
     }
 
     private static Map<Class<?>, OptionParser> PARSERS = Map.of(
