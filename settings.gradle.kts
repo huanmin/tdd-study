@@ -9,4 +9,6 @@
 
 rootProject.name = "tdd-study"
 include("command-parse")
+include("args-other")
+include("args-mocks")
 include("tdd-di")
